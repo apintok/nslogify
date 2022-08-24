@@ -1,0 +1,17 @@
+{
+	"manifest_version": 2,
+	"name": "NS Logify",
+	"version": "1.0",
+	"description": "Tool to pretty print NetSuite Script logs.",
+
+	"icons": {
+		"48": "icons/code-48.png"
+	},
+
+	"content_scripts": [
+		{
+			"matches": ["*://nlcorp-sb4.app.netsuite.com/app/common/scripting/*"],
+			"js": ["nslogify.js"]
+		}
+	]
+}
