@@ -1,0 +1,11 @@
+.background-night {
+    display: block;
+    background-color: rgb(30, 30, 30);
+    border: 1px solid none;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: monospace;
+    padding: 8px;
+    margin: 2px auto;
+}
