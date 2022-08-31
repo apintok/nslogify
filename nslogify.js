@@ -10,26 +10,27 @@ const $a2c9477ca016f6ca$export$cb5260c832aab30a = ()=>{
 const $a2c9477ca016f6ca$var$formatLogs = (logs)=>{
     const titleCol = 3;
     const detailsCol = 7;
+    const colMaxLength = 3999;
     console.log("LOGS >>> ", logs);
-    console.log("LOGS TYPEOF >>> ", typeof logs);
-    console.log("LOGS.LENGTH", logs.length);
-    for(let i = 0; i < logs.length / 2; i++){
+    // console.log('LOGS TYPEOF >>> ', typeof logs);
+    // console.log('LOGS.LENGTH', logs.length);
+    for(let i = 0; i <= logs.length / 2; i++){
         let row = document.getElementById(`scriptnoterow${i}`);
         let columns = row.children;
         let colvalue = columns.item(detailsCol).innerText;
-        let log = $a2c9477ca016f6ca$var$validateLogType(colvalue);
         // console.log(`LOG-ROW >>> ${i} `, row);
-        console.log(`LOG-COLUMNS >>> ${i} `, colvalue);
+        console.log(`LOG-COLUMNS-LENGTH >>> ${i} `, colvalue.length);
         // console.log(`LOG-COLUMNS TYPEOF >>> ${i} `, typeof colvalue);
-        console.log(`LOG-PARSED >>> ${i} `, log);
-        // console.log(`LOG-PARSED TYPEOF >>> ${i} `, typeof log);
-        if (log) {
-            let prettyLog = JSON.stringify(log, null, 4);
-            console.log(`LOG-colvalue >>> ${i} `, columns[detailsCol].innerHTML);
-            columns[detailsCol].innerHTML = '<div class="background-night"><pre><code>' + prettyLog + "</pre></code></div>";
-        }
-    // const detailsObj = JSON.parse(details);
-    // const detailsObjPrint = JSON.stringify(detailsObj, null, 4);
+        if (colvalue.length < colMaxLength) {
+            let log = $a2c9477ca016f6ca$var$validateLogType(colvalue);
+            // console.log(`LOG-PARSED >>> ${i} `, log);
+            // console.log(`LOG-PARSED TYPEOF >>> ${i} `, typeof log);
+            if (log) {
+                let prettyLog = JSON.stringify(log, null, 4);
+                console.log(`LOG-colvalue >>> ${i} `, columns[detailsCol].innerHTML);
+                columns[detailsCol].innerHTML = '<div class="background-night"><pre><code>' + prettyLog + "</pre></code></div>";
+            }
+        } else console.warn("Object is too long!");
     }
 };
 const $a2c9477ca016f6ca$var$validateLogType = (log)=>{

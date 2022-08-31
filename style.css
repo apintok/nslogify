@@ -1,11 +1,23 @@
 .background-night {
     display: block;
-    background-color: rgb(30, 30, 30);
-    border: 1px solid none;
-    color: white;
+    background-color: #1E1E1E;
+    border: 1px solid lightgray;
     border-radius: 5px;
+    color: white;
     text-decoration: none;
     font-family: monospace;
-    padding: 8px;
+    padding: 5px 8px;
+    margin: 2px auto;
+}
+
+.background-light {
+    display: block;
+    background-color: aliceblue;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    color: black;
+    text-decoration: none;
+    font-family: monospace;
+    padding: 5px 8px;
     margin: 2px auto;
 }
