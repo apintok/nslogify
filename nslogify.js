@@ -1,60 +1,6 @@
-const $a2c9477ca016f6ca$export$cb5260c832aab30a = ()=>{
-    setTimeout(()=>{
-        const scriptNotes = document.getElementById("scriptnote__tab");
-        // ! tBody is the table containing the logs!
-        const tBody = scriptNotes.children[1];
-        const logs = tBody.childNodes;
-        $a2c9477ca016f6ca$var$formatLogs(logs);
-    }, 600);
-};
-const $a2c9477ca016f6ca$var$formatLogs = (logs)=>{
-    const titleCol = 3;
-    const detailsCol = 7;
-    const colMaxLength = 3999;
-    console.log("LOGS >>> ", logs);
-    // console.log('LOGS TYPEOF >>> ', typeof logs);
-    // console.log('LOGS.LENGTH', logs.length);
-    for(let i = 0; i <= logs.length / 2; i++){
-        let row = document.getElementById(`scriptnoterow${i}`);
-        let columns = row.children;
-        let colvalue = columns.item(detailsCol).innerText;
-        // console.log(`LOG-ROW >>> ${i} `, row);
-        console.log(`LOG-COLUMNS-LENGTH >>> ${i} `, colvalue.length);
-        // console.log(`LOG-COLUMNS TYPEOF >>> ${i} `, typeof colvalue);
-        if (colvalue.length < colMaxLength) {
-            let log = $a2c9477ca016f6ca$var$validateLogType(colvalue);
-            // console.log(`LOG-PARSED >>> ${i} `, log);
-            // console.log(`LOG-PARSED TYPEOF >>> ${i} `, typeof log);
-            if (log) {
-                let prettyLog = JSON.stringify(log, null, 4);
-                console.log(`LOG-colvalue >>> ${i} `, columns[detailsCol].innerHTML);
-                columns[detailsCol].innerHTML = '<div class="background-night"><pre><code>' + prettyLog + "</pre></code></div>";
-            }
-        } else console.warn("Object is too long!");
-    }
-};
-const $a2c9477ca016f6ca$var$validateLogType = (log)=>{
-    const arr = "[";
-    const obj = "{";
-    if (log[0] === arr || log[0] === obj) return JSON.parse(log);
-};
-
-
-console.log("Extension", "Init...");
-// ? DOM ELEMENTS
-const $9184024f63534557$var$executionLogTab = document.getElementById("executionloglnk");
-const $9184024f63534557$var$refreshBtn = document.getElementById("refreshscriptnote");
-var $9184024f63534557$var$fileref = document.createElement("link");
-$9184024f63534557$var$fileref.setAttribute("rel", "stylesheet");
-$9184024f63534557$var$fileref.setAttribute("type", "text/css");
-$9184024f63534557$var$fileref.setAttribute("href", "resource://02a75d05ec7a8e9f06a94cfac394797f3e7e4775@temporary-addon/content/skin/style.css");
-document.getElementsByTagName("head")[0].appendChild($9184024f63534557$var$fileref);
-$9184024f63534557$var$executionLogTab.addEventListener("click", function() {
-    (0, $a2c9477ca016f6ca$export$cb5260c832aab30a)();
-});
-$9184024f63534557$var$refreshBtn.addEventListener("click", function() {
-    (0, $a2c9477ca016f6ca$export$cb5260c832aab30a)();
-});
-
-
+parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcelRequire,u="function"==typeof require&&require;function f(t,n){if(!r[t]){if(!e[t]){var i="function"==typeof parcelRequire&&parcelRequire;if(!n&&i)return i(t,!0);if(o)return o(t,!0);if(u&&"string"==typeof t)return u(t);var c=new Error("Cannot find module '"+t+"'");throw c.code="MODULE_NOT_FOUND",c}p.resolve=function(r){return e[t][1][r]||r},p.cache={};var l=r[t]=new f.Module(t);e[t][0].call(l.exports,p,l,l.exports,this)}return r[t].exports;function p(e){return f(p.resolve(e))}}f.isParcelRequire=!0,f.Module=function(e){this.id=e,this.bundle=f,this.exports={}},f.modules=e,f.cache=r,f.parent=o,f.register=function(r,t){e[r]=[function(e,r){r.exports=t},{}]};for(var c=0;c<t.length;c++)try{f(t[c])}catch(e){i||(i=e)}if(t.length){var l=f(t[t.length-1]);"object"==typeof exports&&"undefined"!=typeof module?module.exports=l:"function"==typeof define&&define.amd?define(function(){return l}):n&&(this[n]=l)}if(parcelRequire=f,i)throw i;return f}({"YOqM":[function(require,module,exports) {
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.parseLog=exports.getLogs=exports.extractLogs=void 0;var e=function e(){var t;return t=document.getElementById("scriptnote__tab").children[1].childNodes,console.log("LOGS INIT >>> ",t),t||(console.log("LOGS IF >>> ",t),void e())};exports.getLogs=e;var t=function(e){for(var t=[],o=0;o<e.length/2;o++){var r=document.getElementById("scriptnoterow".concat(o)),n=r.children.item(7).innerText;console.log("LOG-ROW >>> ".concat(o," "),r),console.log("LOG-COLUMNS-LENGTH >>> ".concat(o," "),n.length),t.push(n)}return t};exports.extractLogs=t;var o=function(e){var t=[];return e.forEach(function(e){return t.push(r(e))}),t};exports.parseLog=o;var r=function(e){if(e.length<3999&&("["===e[0]||"{"===e[0]))return JSON.parse(e)};
+},{}],"epB2":[function(require,module,exports) {
+"use strict";var e=require("../js/util");function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function r(e,t,r){return t&&n(e.prototype,t),r&&n(e,r),Object.defineProperty(e,"prototype",{writable:!1}),e}console.log("Extension","Init...");var o=document.getElementById("executionloglnk"),a=document.getElementById("refreshscriptnote"),c=document.createElement("link");c.setAttribute("rel","stylesheet"),c.setAttribute("type","text/css"),c.setAttribute("href","resource://02a75d05ec7a8e9f06a94cfac394797f3e7e4775@temporary-addon/content/skin/style.css"),document.getElementsByTagName("head")[0].appendChild(c);var s=function(){function e(n){t(this,e),this.type=n}return r(e,[{key:"isArray",get:function(){return Array.isArray(this.type)}}]),e}();o.addEventListener("click",function(){for(var t=(0,e.getLogs)(),n=(0,e.extractLogs)(t),r=(0,e.parseLog)(n),o=0;o<r.length;o++)console.log("parsedLog ".concat(o," >>>"),r[o])}),a.addEventListener("click",function(){for(var t=(0,e.getLogs)(),n=(0,e.extractLogs)(t),r=(0,e.parseLog)(n),o=0;o<r.length;o++)console.log("parsedLog ".concat(o," >>>"),r[o])});
+},{"../js/util":"YOqM"}]},{},["epB2"], null)
 //# sourceMappingURL=nslogify.js.map

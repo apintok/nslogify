@@ -1,56 +1,49 @@
-// util library
+'use strict';
 
 export const getLogs = () => {
-    setTimeout(() => {
-        const scriptNotes = document.getElementById('scriptnote__tab');
-        // ! tBody is the table containing the logs!
-        const tBody = scriptNotes.children[1];
-        const logs = tBody.childNodes;
+    let logs = null;
+    const scriptNotes = document.getElementById('scriptnote__tab');
+    // ! tBody is the table containing the logs!
+    const tBody = scriptNotes.children[1];
+    logs = tBody.childNodes;
+    console.log('LOGS INIT >>> ', logs);
 
-        formatLogs(logs);
-    }, 600);
+    if (!logs) {
+        console.log('LOGS IF >>> ', logs);
+        getLogs();
+        return;
+    }
+    return logs;
 };
 
-const formatLogs = (logs) => {
-    const titleCol = 3;
+export const extractLogs = (logRows) => {
     const detailsCol = 7;
-    const colMaxLength = 3999;
-    console.log('LOGS >>> ', logs);
-    // console.log('LOGS TYPEOF >>> ', typeof logs);
-    // console.log('LOGS.LENGTH', logs.length);
+    let validLogs = [];
 
-    for (let i = 0; i <= logs.length / 2; i++) {
+    for (let i = 0; i < logRows.length / 2; i++) {
         let row = document.getElementById(`scriptnoterow${i}`);
         let columns = row.children;
         let colvalue = columns.item(detailsCol).innerText;
-        // console.log(`LOG-ROW >>> ${i} `, row);
+        console.log(`LOG-ROW >>> ${i} `, row);
         console.log(`LOG-COLUMNS-LENGTH >>> ${i} `, colvalue.length);
-        // console.log(`LOG-COLUMNS TYPEOF >>> ${i} `, typeof colvalue);
 
-        if (colvalue.length < colMaxLength) {
-            let log = validateLogType(colvalue);
-            // console.log(`LOG-PARSED >>> ${i} `, log);
-            // console.log(`LOG-PARSED TYPEOF >>> ${i} `, typeof log);
-            if (log) {
-                let prettyLog = JSON.stringify(log, null, 4);
-                console.log(
-                    `LOG-colvalue >>> ${i} `,
-                    columns[detailsCol].innerHTML
-                );
-                columns[detailsCol].innerHTML =
-                    '<div class="background-night"><pre><code>' +
-                    prettyLog +
-                    '</pre></code></div>';
-            }
-        } else {
-            console.warn('Object is too long!');
-        }
+        validLogs.push(colvalue);
     }
+
+    return validLogs;
 };
 
-const validateLogType = (log) => {
+export const parseLog = (logs) => {
+    let parsedLogs = [];
+    logs.forEach((log) => parsedLogs.push(logType(log)));
+    return parsedLogs;
+};
+
+const logType = (log) => {
     const arr = '[';
     const obj = '{';
 
-    if (log[0] === arr || log[0] === obj) return JSON.parse(log);
+    if (log.length < 3999) {
+        if (log[0] === arr || log[0] === obj) return JSON.parse(log);
+    }
 };

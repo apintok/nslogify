@@ -1,4 +1,4 @@
-import { getLogs } from '/js/util';
+import { getLogs, extractLogs, parseLog } from '../js/util';
 
 console.log('Extension', 'Init...');
 
@@ -6,19 +6,41 @@ console.log('Extension', 'Init...');
 const executionLogTab = document.getElementById('executionloglnk');
 const refreshBtn = document.getElementById('refreshscriptnote');
 
-var fileref = document.createElement('link');
-fileref.setAttribute('rel', 'stylesheet');
-fileref.setAttribute('type', 'text/css');
-fileref.setAttribute(
+var cssFile = document.createElement('link');
+cssFile.setAttribute('rel', 'stylesheet');
+cssFile.setAttribute('type', 'text/css');
+cssFile.setAttribute(
     'href',
     'resource://02a75d05ec7a8e9f06a94cfac394797f3e7e4775@temporary-addon/content/skin/style.css'
 );
-document.getElementsByTagName('head')[0].appendChild(fileref);
+document.getElementsByTagName('head')[0].appendChild(cssFile);
+
+class Log {
+    constructor(type) {
+        this.type = type;
+    }
+
+    get isArray() {
+        return Array.isArray(this.type);
+    }
+}
 
 executionLogTab.addEventListener('click', function () {
-    getLogs();
+    const logRows = getLogs();
+    const extractedLogs = extractLogs(logRows);
+    const parsedLogs = parseLog(extractedLogs);
+
+    for (let i = 0; i < parsedLogs.length; i++) {
+        console.log(`parsedLog ${i} >>>`, parsedLogs[i]);
+    }
 });
 
 refreshBtn.addEventListener('click', function () {
-    getLogs();
+    const logRows = getLogs();
+    const extractedLogs = extractLogs(logRows);
+    const parsedLogs = parseLog(extractedLogs);
+
+    for (let i = 0; i < parsedLogs.length; i++) {
+        console.log(`parsedLog ${i} >>>`, parsedLogs[i]);
+    }
 });
