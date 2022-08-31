@@ -16,31 +16,47 @@ cssFile.setAttribute(
 document.getElementsByTagName('head')[0].appendChild(cssFile);
 
 class Log {
-    constructor(type) {
-        this.type = type;
+    constructor(value) {
+        this.value = value;
     }
 
-    get isArray() {
-        return Array.isArray(this.type);
+    isArray() {
+        return Array.isArray(this.value);
+    }
+
+    isEmptyArray() {
+        return this.value.length === 0 && this.isArray();
+    }
+
+    isObject() {
+        return (
+            typeof this.value === 'object' &&
+            this.value !== null &&
+            !this.isArray(this.value)
+        );
+    }
+
+    isEmptyObject() {
+        return this.isObject() && Object.keys(this.value).length === 0;
     }
 }
 
 executionLogTab.addEventListener('click', function () {
-    const logRows = getLogs();
-    const extractedLogs = extractLogs(logRows);
-    const parsedLogs = parseLog(extractedLogs);
-
-    for (let i = 0; i < parsedLogs.length; i++) {
-        console.log(`parsedLog ${i} >>>`, parsedLogs[i]);
-    }
+    init();
 });
 
 refreshBtn.addEventListener('click', function () {
+    init();
+});
+
+function init() {
     const logRows = getLogs();
     const extractedLogs = extractLogs(logRows);
     const parsedLogs = parseLog(extractedLogs);
+    let arr = [];
 
     for (let i = 0; i < parsedLogs.length; i++) {
         console.log(`parsedLog ${i} >>>`, parsedLogs[i]);
+        arr.push(new Log(parsedLogs[i]));
     }
-});
+}

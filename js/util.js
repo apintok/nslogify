@@ -6,10 +6,9 @@ export const getLogs = () => {
     // ! tBody is the table containing the logs!
     const tBody = scriptNotes.children[1];
     logs = tBody.childNodes;
-    console.log('LOGS INIT >>> ', logs);
+    // console.log('LOGS INIT >>> ', logs);
 
     if (!logs) {
-        console.log('LOGS IF >>> ', logs);
         getLogs();
         return;
     }
@@ -19,13 +18,15 @@ export const getLogs = () => {
 export const extractLogs = (logRows) => {
     const detailsCol = 7;
     let validLogs = [];
+    let colvalue;
 
     for (let i = 0; i < logRows.length / 2; i++) {
         let row = document.getElementById(`scriptnoterow${i}`);
         let columns = row.children;
-        let colvalue = columns.item(detailsCol).innerText;
-        console.log(`LOG-ROW >>> ${i} `, row);
-        console.log(`LOG-COLUMNS-LENGTH >>> ${i} `, colvalue.length);
+        colvalue = columns.item(detailsCol).innerText;
+        // console.log(`LOG-ROW >>> ${i} `, row);
+        // console.log(`LOG-colvalue >>> ${i} `, colvalue);
+        // console.log(`LOG-COLUMNS-LENGTH >>> ${i} `, colvalue.length);
 
         validLogs.push(colvalue);
     }
@@ -40,10 +41,11 @@ export const parseLog = (logs) => {
 };
 
 const logType = (log) => {
+    const maxColLength = 3999;
     const arr = '[';
     const obj = '{';
 
-    if (log.length < 3999) {
+    if (log.length < maxColLength) {
         if (log[0] === arr || log[0] === obj) return JSON.parse(log);
     }
 };
