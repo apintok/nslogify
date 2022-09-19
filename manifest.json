@@ -14,7 +14,7 @@
                 "*://nlcorp-sb4.app.netsuite.com/app/common/scripting/*",
                 "*://*.app.netsuite.com/app/common/scripting/*"
             ],
-            "css": ["style.css"],
+            "css": ["./css/main.css"],
             "js": ["nslogify.js"]
         }
     ]
