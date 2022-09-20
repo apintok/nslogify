@@ -51,11 +51,13 @@ class Log {
     }
 }
 
-executionLogTab.addEventListener('click', function () {
+executionLogTab.addEventListener('click', function (e) {
+    e.preventDefault();
     init();
 });
 
-refreshBtn.addEventListener('click', function () {
+refreshBtn.addEventListener('click', function (e) {
+    e.preventDefault();
     init();
 });
 
@@ -66,7 +68,6 @@ function init() {
     let logsArray = [];
 
     for (let i = 0; i < parsedLogs.length; i++) {
-        // console.log(`parsedLog ${i} >>>`, parsedLogs[i]);
         logsArray.push(new Log(parsedLogs[i]));
     }
     console.log('logsArray', logsArray);

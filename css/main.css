@@ -1,7 +1,7 @@
 .key {
   color: #23a0db; }
 
-.value__str {
+.value__str, .value__date {
   color: #31f031; }
 
 .value__num {
@@ -16,6 +16,12 @@
 .value__dflt {
   color: #ffffff; }
 
+.value__url {
+  color: #027bff; }
+
+.value__obj, .value__arr {
+  color: #ffffff; }
+
 pre {
   display: block;
   border-radius: 5px;
@@ -26,9 +32,3 @@ pre {
   color: #FFF;
   background-color: #1E1E1E;
   border: 1px solid lightgray; }
-  pre__dark {
-    background-color: #1E1E1E;
-    border: 1px solid lightgray; }
-  pre__light {
-    background-color: #FFF;
-    border: 1px solid lightgray; }

@@ -6,7 +6,7 @@ export const getLogs = () => {
     // ! tBody is the table containing the logs!
     const tBody = scriptNotes.children[1];
     logs = tBody.childNodes;
-    // console.log('LOGS INIT >>> ', logs);
+    console.log('LOGS INIT >>> ', logs);
 
     if (!logs) {
         getLogs();
@@ -30,7 +30,6 @@ export const extractLogs = (logRows) => {
         validLogs.push(colValue);
     }
 
-    console.log('validLogs >>> ', validLogs);
     return validLogs;
 };
 
@@ -52,43 +51,105 @@ const logType = (log) => {
 
 export const printLogs = (parsedLogs) => {
     const detailsCol = 7;
-    let colHTML;
-    const pre = document.createElement('pre');
-    const code = document.createElement('code');
-    pre.setAttribute('class', 'log__dark');
 
     for (let i = 0; i < parsedLogs.length; i++) {
         let row = document.getElementById(`scriptnoterow${i}`);
         let columns = row.children;
-        colHTML = columns.item(detailsCol).innerHTML;
-        // console.log(`LOG-ROW >>> ${i} `, row);
-        // console.log(`LOG-COLUMNS ${detailsCol}, Row ${i} >>> `, columns);
 
-        if (parsedLogs[i]) {
-            // console.log(`PARSED LOG >>> ${i} `, parsedLogs[i]);
-            // console.log(`LOG-COLUMNS ${detailsCol}, >>> `, columns[detailsCol]);
-            // code.innerHTML = prettyPrintLogs(parsedLogs[i]);
-            // pre.append(code);
-            // columns[detailsCol].innerHTML = pre.outerHTML;
+        // console.log(`PARSED LOG >>> ${i} `, parsedLogs[i]);
+        if (parsedLogs[i] && Object.keys(parsedLogs[i]).length > 0) {
+            let pre = document.createElement('pre');
+            let code = document.createElement('code');
+
+            code.innerHTML = prettyPrintLogs(parsedLogs[i]);
+
+            if (columns[detailsCol].firstElementChild) {
+                columns[detailsCol].removeChild(pre.firstElementChild);
+            }
+
+            pre.append(code);
+            columns[detailsCol].firstChild.textContent = '';
+            columns[detailsCol].append(pre);
         }
     }
 };
 
-const prettyPrintLogs = (parsedLog) => {
-    // `<span class="key">"firstname":</span> <span class="value__dflt">"Andre"</span>`;
-    const openBracket = '{';
-    const closeBracket = '}';
-    let finalPrint = '';
+const prettyPrintLogs = (obj) => {
+    const keysHTML = buildKeysHTML(obj);
+    const valuesHTML = buildValuesHTML(obj);
+    return buildCodeHTML(keysHTML, valuesHTML);
+};
 
-    for (const property in parsedLog) {
-        console.log(`${property}: ${parsedLog[property]}`);
-        finalPrint +=
-            `<span class="key">"${property}"</span>` +
-            `:` +
-            `<span class="value__dflt">${parsedLog[property]}</span>`;
+const buildKeysHTML = (obj) => {
+    // console.log(`buildKeysHTML >>> `, obj);
+    let keysArr = [];
+
+    for (const key in obj) {
+        keysArr.push(`<span class="key">"${key}"</span>`);
     }
 
-    console.log(`finalPrint >>>`, `${finalPrint}`);
+    return keysArr;
+};
 
-    return openBracket + finalPrint + closeBracket;
+const buildValuesHTML = (obj) => {
+    const cssClassString = 'value__str';
+    const cssClassBoolean = 'value__bool';
+    const cssClassNumber = 'value__num';
+    const cssClassNull = 'value__null';
+    const cssClassUrl = 'value__url';
+    const cssClassObj = 'value__obj';
+    const cssClassArr = 'value__arr';
+
+    // console.log(`buildValuesHTML >>> `, obj);
+    let valuesArr = [];
+
+    for (const key in obj) {
+        if (typeof obj[key] === 'string') {
+            valuesArr.push(
+                `<span class="${cssClassString}">"${obj[key]}"</span>`
+            );
+        } else if (typeof obj[key] === 'number') {
+            valuesArr.push(
+                `<span class="${cssClassNumber}">${obj[key]}</span>`
+            );
+        } else if (typeof obj[key] === 'boolean') {
+            valuesArr.push(
+                `<span class="${cssClassBoolean}">${obj[key]}</span>`
+            );
+        } else if (obj[key] === null) {
+            valuesArr.push(`<span class="${cssClassNull}">${obj[key]}</span>`);
+        } else if (typeof obj[key] === 'object') {
+            console.log('Is Object?', true);
+            // TODO: If obj stringify to see if is arr/obj
+            const myObj = JSON.stringify(obj[key]);
+
+            if (myObj[0] === '{') {
+                console.log('Is Object!', true);
+            } else {
+                console.log('Is Array!', true);
+            }
+
+            const rootObj = JSON.stringify(obj[key]);
+            console.log('rootObj', rootObj);
+            valuesArr.push(`<span class="${cssClassObj}">${obj[key]}</span>`);
+        }
+    }
+
+    return valuesArr;
+};
+
+const buildCodeHTML = (keysHTML, valuesHTML) => {
+    const openBracket = '{';
+    const closeBracket = '}';
+
+    let finalPrint = '';
+
+    for (let i = 0; i < keysHTML.length; i++) {
+        finalPrint += `${keysHTML[i]}: ${valuesHTML[i]},<br>`;
+    }
+    // console.log('buildCodeHTML/finalPrint >>> ', finalPrint);
+    return `${openBracket}<br>${finalPrint.substring(
+        0,
+        finalPrint.length - 5
+    )}<br>${closeBracket}`;
 };
