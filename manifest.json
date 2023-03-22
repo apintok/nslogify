@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "nslogify",
+  "version": "1.0",
+
+  "description": "Pretty prints SuiteScript logs on Firefox.",
+
+  "icons": {
+    "48": "icons/code-48.png",
+    "96": "icons/code-96.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.app.netsuite.com/app/common/scripting/*"],
+      "css": ["./css/style.css"],
+      "js": ["nslogify.js"]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "nslogify",
+  "version": "1.0.0",
+  "description": "Beautify SuiteScript Logs",
+  "main": "nslogify.js",
+  "scripts": {
+    "dev": "parcel build ./js/app.js --out-dir ./ --out-file nslogify.js --public-url .",
+    "build": "parcel build ./js/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apintok/nslogify.git"
+  },
+  "keywords": [
+    "suitescript",
+    "netsuite",
+    "logs"
+  ],
+  "author": "apintok",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apintok/nslogify/issues"
+  },
+  "homepage": "https://github.com/apintok/nslogify#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}
