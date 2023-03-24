@@ -1,0 +1,29 @@
+.log__dark {
+  display: block;
+  background-color: #1e1e1e;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  font-family: monospace;
+}
+
+.key {
+  color: #23a0db;
+}
+
+.value__bool {
+  color: #ec4242;
+}
+
+.value__str {
+  color: #31f031;
+}
+
+.value__num {
+  color: #66c2ff;
+}
+
+.value__null {
+  color: #eec97d;
+}

@@ -3,7 +3,6 @@ console.log('Extension Init...');
 // UI ELEMENTS
 const scriptNotes = document.getElementById('scriptnote__div');
 
-// EVENT LISTENERS
 // Create a new observer object for the Execution Logs Tab in the UI.
 const executionLogsUI = new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
@@ -11,21 +10,52 @@ const executionLogsUI = new MutationObserver((mutations) => {
       mutation.type === 'childList' &&
       mutation.target.id === 'scriptnote__div'
     ) {
-      console.log(mutation.type, mutation.target);
+      // console.log(mutation.type, mutation.target);
       const scriptNotesTable = mutation.target.firstElementChild;
       const scriptNotesTableBody = scriptNotesTable.lastChild;
-      const tableLinesCount = scriptNotesTableBody.childElementCount;
-      console.log('count >>> ', tableLinesCount);
-      console.log('scriptNotesTableBody >>> ', scriptNotesTableBody);
+      // console.log('scriptNotesTableBody >>> ', scriptNotesTableBody);
       const scriptNotesTableLines = scriptNotesTableBody.childNodes;
-      console.log('scriptNotesTableLines >>> ', scriptNotesTableLines);
+      // console.log('scriptNotesTableLines >>> ', scriptNotesTableLines);
 
-      // ! First GOAL achieved. Reach the div.table.lines of the script execution logs table
+      // ! 2nd GOAL achieved. Reach the Details Column for each line in the logs table
+      // * Loop thorugh each table line
       for (let i = 0; i < scriptNotesTableLines.length; i++) {
         if (i % 2 !== 0) {
           continue;
         }
-        console.log(scriptNotesTableLines[i]);
+
+        const columns = scriptNotesTableLines[i].children;
+
+        // * Loop thorugh each line column
+        for (const key in columns) {
+          if (Object.hasOwnProperty.call(columns, key)) {
+            if (key === '7') {
+              // * The Details Column index is 7.
+              const detailsColumn = columns['7'];
+
+              // ! return the log parsed!
+              const formattedLog = formatLog(detailsColumn.textContent);
+              // console.log('Inner HTML >>> ', detailsColumn);
+
+              const divElement = document.createElement('div');
+              const preElement = document.createElement('pre');
+              const codeElement = document.createElement('code');
+
+              divElement.classList.add('log__dark');
+              divElement.appendChild(preElement);
+              preElement.appendChild(codeElement);
+
+              if (formattedLog !== 'ignore') {
+                codeElement.textContent = JSON.stringify(formattedLog, null, 2);
+                // Append the div element to the td element
+                detailsColumn.replaceChild(
+                  divElement,
+                  detailsColumn.firstChild
+                );
+              }
+            }
+          }
+        }
       }
     }
   });
@@ -37,3 +67,19 @@ executionLogsUI.observe(scriptNotes, {
   attributes: true, // detect when attributes of existing nodes are changed
   subtree: true // observe all descendants of the target node
 });
+
+// FUNCTIONS
+const formatLog = (log) => {
+  if (!log) return;
+
+  const parsedLog = JSON.parse(log);
+  let formattedLog = 'ignore';
+  console.log('Log >>> ', log);
+
+  if (Array.isArray(parsedLog) || typeof parsedLog === 'object') {
+    console.log('The contents of the log represent an ARRAY/OBJECT.');
+    formattedLog = parsedLog;
+  }
+
+  return formattedLog;
+};
