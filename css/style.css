@@ -1,11 +1,18 @@
+/* Dark Mode */
 .log__dark {
   display: block;
+  margin: 10px 5px;
+  padding: 15px;
   background-color: #1e1e1e;
   border: 1px solid lightgray;
   border-radius: 5px;
   color: white;
   text-decoration: none;
   font-family: monospace;
+}
+
+.log__dark pre {
+  tab-size: 8;
 }
 
 .key {
@@ -26,4 +33,17 @@
 
 .value__null {
   color: #eec97d;
+}
+
+/* Light Mode */
+.log__light {
+  display: block;
+  margin: 10px 5px;
+  padding: 15px;
+  background-color: #ffecec;
+  border: 1px solid silver;
+  border-radius: 5px;
+  color: black;
+  text-decoration: none;
+  font-family: monospace;
 }
