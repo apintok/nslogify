@@ -59,12 +59,12 @@ const formatLog = (log) => {
   const parsedLog = JSON.parse(log);
 
   if (Array.isArray(parsedLog)) {
-    console.log('The contents of the log represent an array.');
+    console.log('The contents of the log represent an ARRAY.');
   } else if (typeof parsedLog === 'object') {
-    console.log('The contents of the log represent an object.');
+    console.log('The contents of the log represent an OBJECT.');
   } else {
     console.log(
-      'The contents of the log do not represent an array or an object.'
+      'The contents of the log DO NOT represent an array or an object.'
     );
   }
 };
