@@ -46,7 +46,8 @@ const executionLogsUI = new MutationObserver((mutations) => {
               preElement.appendChild(codeElement);
 
               if (formattedLog !== 'ignore') {
-                codeElement.textContent = JSON.stringify(formattedLog, null, 2);
+                // codeElement.textContent = JSON.stringify(formattedLog, null, 2);
+                codeElement.innerHTML = formattedLog;
                 // Append the div element to the td element
                 detailsColumn.replaceChild(
                   divElement,
@@ -76,10 +77,33 @@ const formatLog = (log) => {
   let formattedLog = 'ignore';
   console.log('Log >>> ', log);
 
-  if (Array.isArray(parsedLog) || typeof parsedLog === 'object') {
-    console.log('The contents of the log represent an ARRAY/OBJECT.');
+  if (Array.isArray(parsedLog)) {
+    formattedLog = formatArray(parsedLog);
+  } else if (typeof parsedLog === 'object') {
     formattedLog = parsedLog;
   }
 
   return formattedLog;
+};
+
+const formatArray = (parsedLog) => {
+  let htmlLog = '';
+
+  parsedLog.forEach((value) => {
+    if (typeof value === 'string') {
+      htmlLog += `<span class="value__str">"${value}"</span>,\n`;
+    } else if (typeof value === 'number') {
+      htmlLog += `<span class="value__num">${value}</span>,\n`;
+    } else if (typeof value === 'boolean') {
+      htmlLog += `<span class="value__bool">${value}</span>,\n`;
+    } else if (value === null) {
+      htmlLog += `<span class="value__null">${value}</span>,\n`;
+    } else if (typeof value === 'undefined') {
+      htmlLog += `<span class="value__null">${value}</span>,\n`;
+    }
+  });
+
+  htmlLog = htmlLog.slice(0, -2);
+  console.log('formatArray >>> ', htmlLog);
+  return `[\n${htmlLog}\n]`;
 };
