@@ -33,8 +33,8 @@ const executionLogsUI = new MutationObserver((mutations) => {
             if (key === '7') {
               // * The Details Column index is 7.
               const detailsColumn = columns['7'];
-              // console.log('detailsColumn >>> ', detailsColumn);
-              console.log('Column Text/Value >>> ', detailsColumn.textContent);
+              // console.log('Column Text/Value >>> ', detailsColumn.textContent);
+              formatLog(detailsColumn.textContent);
             }
           }
         }
@@ -49,3 +49,22 @@ executionLogsUI.observe(scriptNotes, {
   attributes: true, // detect when attributes of existing nodes are changed
   subtree: true // observe all descendants of the target node
 });
+
+// FUNCTIONS
+const formatLog = (log) => {
+  if (!log) return;
+
+  console.log('Log >>> ', log);
+
+  const parsedLog = JSON.parse(log);
+
+  if (Array.isArray(parsedLog)) {
+    console.log('The contents of the log represent an array.');
+  } else if (typeof parsedLog === 'object') {
+    console.log('The contents of the log represent an object.');
+  } else {
+    console.log(
+      'The contents of the log do not represent an array or an object.'
+    );
+  }
+};
