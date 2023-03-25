@@ -37,22 +37,30 @@ const executionLogsUI = new MutationObserver((mutations) => {
               const formattedLog = formatLog(detailsColumn.textContent);
               // console.log('Inner HTML >>> ', detailsColumn);
 
-              const divElement = document.createElement('div');
+              const container = document.createElement('div');
+              const top = document.createElement('div');
+              const btn = document.createElement('button');
+              const display = document.createElement('div');
               const preElement = document.createElement('pre');
               const codeElement = document.createElement('code');
 
-              divElement.classList.add('log', 'dark');
-              divElement.appendChild(preElement);
+              container.classList.add('log', 'dark');
+              top.classList.add('top');
+              container.appendChild(top);
+              btn.id = 'copy';
+              btn.textContent = 'Copy Code';
+              top.appendChild(btn);
+              display.classList.add('display');
+              container.appendChild(display);
+              display.appendChild(preElement);
+              codeElement.id = 'code';
               preElement.appendChild(codeElement);
 
               if (formattedLog !== 'ignore') {
                 // codeElement.textContent = JSON.stringify(formattedLog, null, 2);
                 codeElement.innerHTML = formattedLog;
                 // Append the div element to the td element
-                detailsColumn.replaceChild(
-                  divElement,
-                  detailsColumn.firstChild
-                );
+                detailsColumn.replaceChild(container, detailsColumn.firstChild);
               }
             }
           }
