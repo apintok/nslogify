@@ -41,7 +41,7 @@ const executionLogsUI = new MutationObserver((mutations) => {
               const preElement = document.createElement('pre');
               const codeElement = document.createElement('code');
 
-              divElement.classList.add('log__dark');
+              divElement.classList.add('log', 'dark');
               divElement.appendChild(preElement);
               preElement.appendChild(codeElement);
 

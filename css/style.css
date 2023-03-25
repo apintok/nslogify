@@ -1,18 +1,31 @@
-/* Dark Mode */
-.log__dark {
+.log {
   display: block;
   margin: 10px 5px;
   padding: 15px;
-  background-color: #1e1e1e;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  color: white;
   text-decoration: none;
   font-family: monospace;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 2px;
+}
+/* Dark Mode */
+.dark {
+  background-color: #1e1e1e;
+  border-color: #00aeff;
+  color: white;
 }
 
-.log__dark pre {
-  tab-size: 8;
+/* Light Mode */
+.light {
+  background-color: #ffecec;
+  border-color: silver;
+  color: black;
+}
+
+.log pre code span {
+  margin-left: 12px;
+  padding: 15px 1px 0 8px;
+  font-size: 16px;
 }
 
 .key {
@@ -33,17 +46,4 @@
 
 .value__null {
   color: #eec97d;
-}
-
-/* Light Mode */
-.log__light {
-  display: block;
-  margin: 10px 5px;
-  padding: 15px;
-  background-color: #ffecec;
-  border: 1px solid silver;
-  border-radius: 5px;
-  color: black;
-  text-decoration: none;
-  font-family: monospace;
 }
