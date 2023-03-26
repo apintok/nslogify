@@ -34,9 +34,7 @@ const executionLogsUI = new MutationObserver((mutations) => {
               const formattedLog = formatLog(detailsColumn.textContent);
               // console.log('Inner HTML >>> ', detailsColumn);
 
-              // TODO: move html elements creation to a function
               // TODO: create a formatObject function
-              // TODO: get svg for clipboard for the button
               // TODO: button functionality
 
               const htmlElements = buildHTML();
@@ -44,6 +42,7 @@ const executionLogsUI = new MutationObserver((mutations) => {
               if (formattedLog !== 'ignore') {
                 // codeElement.textContent = JSON.stringify(formattedLog, null, 2);
                 htmlElements.code.innerHTML = formattedLog;
+
                 // Append the div element to the td element
                 detailsColumn.replaceChild(
                   htmlElements.container,
@@ -76,7 +75,7 @@ const formatLog = (log) => {
   if (Array.isArray(parsedLog)) {
     formattedLog = formatArray(parsedLog);
   } else if (typeof parsedLog === 'object') {
-    formattedLog = parsedLog;
+    formattedLog = formatObject(parsedLog);
   }
 
   return formattedLog;
@@ -104,7 +103,29 @@ const formatArray = (parsedLog) => {
   return `[\n${htmlLog}\n]`;
 };
 
-const formatObject = (parsedLog) => {};
+const formatObject = (parsedLog) => {
+  let htmlLog = '';
+
+  for (const key in parsedLog) {
+    if (Object.hasOwnProperty.call(parsedLog, key)) {
+      if (typeof parsedLog[key] === 'string') {
+        htmlLog += `<span class="key">"${key}":</span> <span class="value__str">"${parsedLog[key]}"</span>,\n`;
+      } else if (typeof parsedLog[key] === 'number') {
+        htmlLog += `<span class="key">"${key}":</span> <span class="value__num">${parsedLog[key]}</span>,\n`;
+      } else if (typeof parsedLog[key] === 'boolean') {
+        htmlLog += `<span class="key">"${key}":</span> <span class="value__bool">${parsedLog[key]}</span>,\n`;
+      } else if (parsedLog[key] === null) {
+        htmlLog += `<span class="key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
+      } else if (typeof parsedLog[key] === 'undefined') {
+        htmlLog += `<span class="key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
+      }
+    }
+  }
+
+  htmlLog = htmlLog.slice(0, -2);
+  console.log('formatObject >>> ', htmlLog);
+  return `{\n${htmlLog}\n}`;
+};
 
 const createSVG = (elementToAppend) => {
   // Create an SVG element
