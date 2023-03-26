@@ -33,9 +33,9 @@ const executionLogsUI = new MutationObserver((mutations) => {
               // ! return the log parsed!
               const formattedLog = formatLog(detailsColumn.textContent);
               // console.log('Inner HTML >>> ', detailsColumn);
-
-              // TODO: create a formatObject function
+              
               // TODO: button functionality
+              // TODO: Work on a light mode
 
               const htmlElements = buildHTML();
 
@@ -59,9 +59,9 @@ const executionLogsUI = new MutationObserver((mutations) => {
 
 // Start observing the document's body element and all its descendants
 executionLogsUI.observe(scriptNotes, {
-  childList: true, // detect when child nodes are added or removed
-  attributes: true, // detect when attributes of existing nodes are changed
-  subtree: true // observe all descendants of the target node
+  childList: true,
+  attributes: true,
+  subtree: true
 });
 
 // FUNCTIONS
@@ -86,20 +86,19 @@ const formatArray = (parsedLog) => {
 
   parsedLog.forEach((value) => {
     if (typeof value === 'string') {
-      htmlLog += `<span class="value__str">"${value}"</span>,\n`;
+      htmlLog += `<span class="m-left value__str">"${value}"</span>,\n`;
     } else if (typeof value === 'number') {
-      htmlLog += `<span class="value__num">${value}</span>,\n`;
+      htmlLog += `<span class="m-left value__num">${value}</span>,\n`;
     } else if (typeof value === 'boolean') {
-      htmlLog += `<span class="value__bool">${value}</span>,\n`;
+      htmlLog += `<span class="m-left value__bool">${value}</span>,\n`;
     } else if (value === null) {
-      htmlLog += `<span class="value__null">${value}</span>,\n`;
+      htmlLog += `<span class="m-left value__null">${value}</span>,\n`;
     } else if (typeof value === 'undefined') {
-      htmlLog += `<span class="value__null">${value}</span>,\n`;
+      htmlLog += `<span class="m-left value__null">${value}</span>,\n`;
     }
   });
 
   htmlLog = htmlLog.slice(0, -2);
-  console.log('formatArray >>> ', htmlLog);
   return `[\n${htmlLog}\n]`;
 };
 
@@ -109,21 +108,20 @@ const formatObject = (parsedLog) => {
   for (const key in parsedLog) {
     if (Object.hasOwnProperty.call(parsedLog, key)) {
       if (typeof parsedLog[key] === 'string') {
-        htmlLog += `<span class="key">"${key}":</span> <span class="value__str">"${parsedLog[key]}"</span>,\n`;
+        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__str">"${parsedLog[key]}"</span>,\n`;
       } else if (typeof parsedLog[key] === 'number') {
-        htmlLog += `<span class="key">"${key}":</span> <span class="value__num">${parsedLog[key]}</span>,\n`;
+        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__num">${parsedLog[key]}</span>,\n`;
       } else if (typeof parsedLog[key] === 'boolean') {
-        htmlLog += `<span class="key">"${key}":</span> <span class="value__bool">${parsedLog[key]}</span>,\n`;
+        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__bool">${parsedLog[key]}</span>,\n`;
       } else if (parsedLog[key] === null) {
-        htmlLog += `<span class="key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
+        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
       } else if (typeof parsedLog[key] === 'undefined') {
-        htmlLog += `<span class="key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
+        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
       }
     }
   }
 
   htmlLog = htmlLog.slice(0, -2);
-  console.log('formatObject >>> ', htmlLog);
   return `{\n${htmlLog}\n}`;
 };
 
