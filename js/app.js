@@ -1,5 +1,7 @@
 console.log('Extension Init...');
 
+// TODO: Work on a light mode
+
 // UI ELEMENTS
 const scriptNotes = document.getElementById('scriptnote__div');
 
@@ -8,14 +10,13 @@ const executionLogsUI = new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
     if (
       mutation.type === 'childList' &&
-      mutation.target.id === 'scriptnote__div'
+      mutation.target.id === scriptNotes.id
     ) {
       const scriptNotesTable = mutation.target.firstElementChild;
       const scriptNotesTableBody = scriptNotesTable.lastChild;
       const scriptNotesTableLines = scriptNotesTableBody.childNodes;
       const detailsColumnIndex = '7';
 
-      // ! 2nd GOAL achieved. Reach the Details Column for each line in the logs table
       // * Loop thorugh each table line
       for (let i = 0; i < scriptNotesTableLines.length; i++) {
         if (i % 2 !== 0) {
@@ -29,18 +30,22 @@ const executionLogsUI = new MutationObserver((mutations) => {
           if (Object.hasOwnProperty.call(columns, key)) {
             if (key === detailsColumnIndex) {
               const detailsColumn = columns[detailsColumnIndex];
-
-              // ! return the log parsed!
               const formattedLog = formatLog(detailsColumn.textContent);
-              // console.log('Inner HTML >>> ', detailsColumn);
-              
-              // TODO: button functionality
-              // TODO: Work on a light mode
-
               const htmlElements = buildHTML();
 
+              // ! Add the EVENT LISTENER to the button
+              htmlElements.btn.addEventListener('click', function (e) {
+                const copiedText =
+                  e.target.parentElement.parentElement.lastChild.textContent;
+                navigator.clipboard.writeText(copiedText);
+                htmlElements.btn.textContent = 'Code copied!';
+
+                setInterval(() => {
+                  htmlElements.btn.textContent = 'Copy Code';
+                }, 3000);
+              });
+
               if (formattedLog !== 'ignore') {
-                // codeElement.textContent = JSON.stringify(formattedLog, null, 2);
                 htmlElements.code.innerHTML = formattedLog;
 
                 // Append the div element to the td element
@@ -70,7 +75,7 @@ const formatLog = (log) => {
 
   const parsedLog = JSON.parse(log);
   let formattedLog = 'ignore';
-  console.log('Log >>> ', log);
+  // console.log('Log >>> ', log);
 
   if (Array.isArray(parsedLog)) {
     formattedLog = formatArray(parsedLog);
@@ -176,8 +181,9 @@ const buildHTML = () => {
   btn.id = 'copy';
   createSVG(top);
   btn.textContent = 'Copy Code';
-  top.appendChild(btn);
   display.classList.add('display');
+  display.id = 'display';
+  top.appendChild(btn);
   container.appendChild(display);
   display.appendChild(pre);
   code.id = 'code';
@@ -185,6 +191,7 @@ const buildHTML = () => {
 
   return {
     container,
+    btn,
     code
   };
 };
