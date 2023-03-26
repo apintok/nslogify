@@ -10,12 +10,10 @@ const executionLogsUI = new MutationObserver((mutations) => {
       mutation.type === 'childList' &&
       mutation.target.id === 'scriptnote__div'
     ) {
-      // console.log(mutation.type, mutation.target);
       const scriptNotesTable = mutation.target.firstElementChild;
       const scriptNotesTableBody = scriptNotesTable.lastChild;
-      // console.log('scriptNotesTableBody >>> ', scriptNotesTableBody);
       const scriptNotesTableLines = scriptNotesTableBody.childNodes;
-      // console.log('scriptNotesTableLines >>> ', scriptNotesTableLines);
+      const detailsColumnIndex = '7';
 
       // ! 2nd GOAL achieved. Reach the Details Column for each line in the logs table
       // * Loop thorugh each table line
@@ -29,38 +27,28 @@ const executionLogsUI = new MutationObserver((mutations) => {
         // * Loop thorugh each line column
         for (const key in columns) {
           if (Object.hasOwnProperty.call(columns, key)) {
-            if (key === '7') {
-              // * The Details Column index is 7.
-              const detailsColumn = columns['7'];
+            if (key === detailsColumnIndex) {
+              const detailsColumn = columns[detailsColumnIndex];
 
               // ! return the log parsed!
               const formattedLog = formatLog(detailsColumn.textContent);
               // console.log('Inner HTML >>> ', detailsColumn);
 
-              const container = document.createElement('div');
-              const top = document.createElement('div');
-              const btn = document.createElement('button');
-              const display = document.createElement('div');
-              const preElement = document.createElement('pre');
-              const codeElement = document.createElement('code');
+              // TODO: move html elements creation to a function
+              // TODO: create a formatObject function
+              // TODO: get svg for clipboard for the button
+              // TODO: button functionality
 
-              container.classList.add('log', 'dark');
-              top.classList.add('top');
-              container.appendChild(top);
-              btn.id = 'copy';
-              btn.textContent = 'Copy Code';
-              top.appendChild(btn);
-              display.classList.add('display');
-              container.appendChild(display);
-              display.appendChild(preElement);
-              codeElement.id = 'code';
-              preElement.appendChild(codeElement);
+              const htmlElements = buildHTML();
 
               if (formattedLog !== 'ignore') {
                 // codeElement.textContent = JSON.stringify(formattedLog, null, 2);
-                codeElement.innerHTML = formattedLog;
+                htmlElements.code.innerHTML = formattedLog;
                 // Append the div element to the td element
-                detailsColumn.replaceChild(container, detailsColumn.firstChild);
+                detailsColumn.replaceChild(
+                  htmlElements.container,
+                  detailsColumn.firstChild
+                );
               }
             }
           }
@@ -114,4 +102,70 @@ const formatArray = (parsedLog) => {
   htmlLog = htmlLog.slice(0, -2);
   console.log('formatArray >>> ', htmlLog);
   return `[\n${htmlLog}\n]`;
+};
+
+const formatObject = (parsedLog) => {};
+
+const createSVG = (elementToAppend) => {
+  // Create an SVG element
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('width', '18');
+  svg.setAttribute('height', '18');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke-width', '2');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+  path.setAttribute(
+    'd',
+    'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2'
+  );
+
+  svg.appendChild(path);
+
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+  rect.setAttribute('x', '8');
+  rect.setAttribute('y', '2');
+  rect.setAttribute('width', '8');
+  rect.setAttribute('height', '4');
+  rect.setAttribute('rx', '1');
+  rect.setAttribute('ry', '1');
+
+  svg.appendChild(rect);
+
+  elementToAppend.appendChild(svg);
+};
+
+const buildHTML = () => {
+  // * HTML ELEMENTS
+  const container = document.createElement('div');
+  const top = document.createElement('div');
+  const btn = document.createElement('button');
+  const display = document.createElement('div');
+  const pre = document.createElement('pre');
+  const code = document.createElement('code');
+
+  container.classList.add('log', 'dark');
+  top.classList.add('top');
+  container.appendChild(top);
+  btn.id = 'copy';
+  createSVG(top);
+  btn.textContent = 'Copy Code';
+  top.appendChild(btn);
+  display.classList.add('display');
+  container.appendChild(display);
+  display.appendChild(pre);
+  code.id = 'code';
+  pre.appendChild(code);
+
+  return {
+    container,
+    code
+  };
 };
