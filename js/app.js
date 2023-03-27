@@ -100,6 +100,13 @@ const formatArray = (parsedLog) => {
       htmlLog += `<span class="m-left value__null">${value}</span>,\n`;
     } else if (typeof value === 'undefined') {
       htmlLog += `<span class="m-left value__null">${value}</span>,\n`;
+    } else if (Array.isArray(value)) {
+      console.log('htmlLog Array >>> ', value);
+      htmlLog += formatArray(value);
+      htmlLog += ',\n';
+      console.log('htmlLog After >>> ', htmlLog);
+    } else if (typeof value === 'object') {
+      htmlLog += formatObject(value);
     }
   });
 
