@@ -34,7 +34,7 @@ const executionLogsUI = new MutationObserver((mutations) => {
               const htmlElements = buildHTML();
 
               // ! Add the EVENT LISTENER to the button
-              htmlElements.btn.addEventListener('click', function (e) {
+              htmlElements.btn.addEventListener('click', (e) => {
                 const copiedText =
                   e.target.parentElement.parentElement.lastChild.textContent;
                 navigator.clipboard.writeText(copiedText);
@@ -46,7 +46,9 @@ const executionLogsUI = new MutationObserver((mutations) => {
               });
 
               if (formattedLog !== 'ignore') {
-                htmlElements.code.innerHTML = formattedLog;
+                htmlElements.pre.innerHTML = syntaxHighlight(
+                  JSON.stringify(formattedLog, undefined, 2)
+                );
 
                 // Append the div element to the td element
                 detailsColumn.replaceChild(
@@ -72,46 +74,32 @@ executionLogsUI.observe(scriptNotes, {
 // FUNCTIONS
 const formatLog = (log) => {
   if (!log) return;
-
-  const parsedLog = JSON.parse(log);
-  let formattedLog = 'ignore';
-  // console.log('Log >>> ', log);
-
-  if (Array.isArray(parsedLog)) {
-    formattedLog = formatArray(parsedLog);
-  } else if (typeof parsedLog === 'object') {
-    formattedLog = formatObject(parsedLog);
-  }
-
-  return formattedLog;
+  return JSON.parse(log);
 };
 
-const formatArray = (parsedLog) => {
-  let htmlLog = '';
-
-  parsedLog.forEach((value) => {
-    if (typeof value === 'string') {
-      htmlLog += `<span class="m-left value__str">"${value}"</span>,\n`;
-    } else if (typeof value === 'number') {
-      htmlLog += `<span class="m-left value__num">${value}</span>,\n`;
-    } else if (typeof value === 'boolean') {
-      htmlLog += `<span class="m-left value__bool">${value}</span>,\n`;
-    } else if (value === null) {
-      htmlLog += `<span class="m-left value__null">${value}</span>,\n`;
-    } else if (typeof value === 'undefined') {
-      htmlLog += `<span class="m-left value__null">${value}</span>,\n`;
-    } else if (Array.isArray(value)) {
-      console.log('htmlLog Array >>> ', value);
-      htmlLog += formatArray(value);
-      htmlLog += ',\n';
-      console.log('htmlLog After >>> ', htmlLog);
-    } else if (typeof value === 'object') {
-      htmlLog += formatObject(value);
+const syntaxHighlight = (json) => {
+  json = json
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  return json.replace(
+    /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+    function (match) {
+      var cls = 'value__num';
+      if (/^"/.test(match)) {
+        if (/:$/.test(match)) {
+          cls = 'key';
+        } else {
+          cls = 'value__str';
+        }
+      } else if (/true|false/.test(match)) {
+        cls = 'value__bool';
+      } else if (/null/.test(match)) {
+        cls = 'value__null';
+      }
+      return `<span class="${cls}">${match}</span>`;
     }
-  });
-
-  htmlLog = htmlLog.slice(0, -2);
-  return `[\n${htmlLog}\n]`;
+  );
 };
 
 const formatObject = (parsedLog) => {
@@ -194,11 +182,12 @@ const buildHTML = () => {
   container.appendChild(display);
   display.appendChild(pre);
   code.id = 'code';
-  pre.appendChild(code);
+  // pre.appendChild(code);
 
   return {
     container,
     btn,
-    code
+    pre
+    // code
   };
 };
