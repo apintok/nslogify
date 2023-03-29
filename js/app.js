@@ -85,44 +85,21 @@ const syntaxHighlight = (json) => {
   return json.replace(
     /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
     function (match) {
-      var cls = 'value__num';
+      var cssClass = 'number';
       if (/^"/.test(match)) {
         if (/:$/.test(match)) {
-          cls = 'key';
+          cssClass = 'key';
         } else {
-          cls = 'value__str';
+          cssClass = 'string';
         }
       } else if (/true|false/.test(match)) {
-        cls = 'value__bool';
+        cssClass = 'boolean';
       } else if (/null/.test(match)) {
-        cls = 'value__null';
+        cssClass = 'null';
       }
-      return `<span class="${cls}">${match}</span>`;
+      return `<span cssClass="${cssClass}">${match}</span>`;
     }
   );
-};
-
-const formatObject = (parsedLog) => {
-  let htmlLog = '';
-
-  for (const key in parsedLog) {
-    if (Object.hasOwnProperty.call(parsedLog, key)) {
-      if (typeof parsedLog[key] === 'string') {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__str">"${parsedLog[key]}"</span>,\n`;
-      } else if (typeof parsedLog[key] === 'number') {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__num">${parsedLog[key]}</span>,\n`;
-      } else if (typeof parsedLog[key] === 'boolean') {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__bool">${parsedLog[key]}</span>,\n`;
-      } else if (parsedLog[key] === null) {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
-      } else if (typeof parsedLog[key] === 'undefined') {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
-      }
-    }
-  }
-
-  htmlLog = htmlLog.slice(0, -2);
-  return `{\n${htmlLog}\n}`;
 };
 
 const createSVG = (elementToAppend) => {
@@ -188,6 +165,5 @@ const buildHTML = () => {
     container,
     btn,
     pre
-    // code
   };
 };

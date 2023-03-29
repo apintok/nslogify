@@ -57,18 +57,18 @@
   color: #23a0db;
 }
 
-.value__bool {
+.boolean {
   color: #ec4242;
 }
 
-.value__str {
+.string {
   color: #31f031;
 }
 
-.value__num {
+.number {
   color: #66c2ff;
 }
 
-.value__null {
+.null {
   color: #eec97d;
 }
