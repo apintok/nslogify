@@ -1,6 +1,7 @@
-console.log('Extension Init...');
+console.warn('Extension Init...');
 
 // TODO: Work on a light mode
+localStorage.setItem('theme', 'dark');
 
 // UI ELEMENTS
 const scriptNotes = document.getElementById('scriptnote__div');
@@ -45,6 +46,7 @@ const executionLogsUI = new MutationObserver((mutations) => {
                 }, 3000);
               });
 
+              // TODO: test formattedLog values
               if (formattedLog !== 'ignore') {
                 htmlElements.pre.innerHTML = syntaxHighlight(
                   JSON.stringify(formattedLog, undefined, 2)
@@ -77,12 +79,13 @@ const formatLog = (log) => {
   return JSON.parse(log);
 };
 
-const syntaxHighlight = (json) => {
-  json = json
+const syntaxHighlight = (jsonString) => {
+  jsonString = jsonString
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
-  return json.replace(
+
+  return jsonString.replace(
     /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
     function (match) {
       var cssClass = 'number';
@@ -97,7 +100,7 @@ const syntaxHighlight = (json) => {
       } else if (/null/.test(match)) {
         cssClass = 'null';
       }
-      return `<span cssClass="${cssClass}">${match}</span>`;
+      return `<span class="${cssClass}">${match}</span>`;
     }
   );
 };
@@ -106,6 +109,7 @@ const createSVG = (elementToAppend) => {
   // Create an SVG element
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
+  // TODO move to an object
   svg.setAttribute('viewBox', '0 0 24 24');
   svg.setAttribute('width', '18');
   svg.setAttribute('height', '18');
@@ -126,6 +130,7 @@ const createSVG = (elementToAppend) => {
 
   const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 
+  // TODO move to an object
   rect.setAttribute('x', '8');
   rect.setAttribute('y', '2');
   rect.setAttribute('width', '8');
@@ -147,7 +152,9 @@ const buildHTML = () => {
   const pre = document.createElement('pre');
   const code = document.createElement('code');
 
-  container.classList.add('log', 'dark');
+  // container.classList.add('log', 'dark');
+  container.classList.add('log', localStorage.getItem('theme'));
+
   top.classList.add('top');
   container.appendChild(top);
   btn.id = 'copy';
@@ -159,7 +166,6 @@ const buildHTML = () => {
   container.appendChild(display);
   display.appendChild(pre);
   code.id = 'code';
-  // pre.appendChild(code);
 
   return {
     container,

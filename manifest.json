@@ -16,5 +16,24 @@
       "css": ["./css/style.css"],
       "js": ["nslogify.js"]
     }
-  ]
+  ],
+
+  "options_ui": {
+    "page": "settings.html"
+  },
+
+  "permissions": ["storage", "tabs"],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "addon@nslogify.com"
+    },
+    "browser_action_next_to_addressbar": true
+  },
+
+  "browser_action": {
+    "default_icon": "icons/code-48.png",
+    "default_title": "nslogify",
+    "default_popup": "settings.html"
+  }
 }
