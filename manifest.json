@@ -4,6 +4,7 @@
   "version": "1.0",
 
   "description": "Pretty prints SuiteScript logs on Firefox.",
+  "homepage_url": "https://github.com/apintok/nslogify",
 
   "icons": {
     "48": "icons/code-48.png",

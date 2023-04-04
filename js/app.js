@@ -1,7 +1,3 @@
-console.log('Extension Init...');
-
-// TODO: Work on a light mode
-
 // UI ELEMENTS
 const scriptNotes = document.getElementById('scriptnote__div');
 
@@ -97,25 +93,39 @@ const syntaxHighlight = (json) => {
       } else if (/null/.test(match)) {
         cssClass = 'null';
       }
-      return `<span cssClass="${cssClass}">${match}</span>`;
+      return `<span class="${cssClass}">${match}</span>`;
     }
   );
 };
 
 const createSVG = (elementToAppend) => {
-  // Create an SVG element
+  const svgAttributes = {
+    'viewBox': '0 0 24 24',
+    'width': '18',
+    'height': '18',
+    'stroke': 'currentColor',
+    'fill': 'none',
+    'stroke-width': '2',
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round'
+  };
+
+  const rectAttributes = {
+    x: '8',
+    y: '2',
+    width: '8',
+    height: '4',
+    rx: '1',
+    ry: '1'
+  };
+
+  // Create an SVG Elements
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('width', '18');
-  svg.setAttribute('height', '18');
-  svg.setAttribute('stroke', 'currentColor');
-  svg.setAttribute('fill', 'none');
-  svg.setAttribute('stroke-width', '2');
-  svg.setAttribute('stroke-linecap', 'round');
-  svg.setAttribute('stroke-linejoin', 'round');
-
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+  // Set the SVG Element Attributes
+  setAttributes(svg, svgAttributes);
 
   path.setAttribute(
     'd',
@@ -124,18 +134,20 @@ const createSVG = (elementToAppend) => {
 
   svg.appendChild(path);
 
-  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-
-  rect.setAttribute('x', '8');
-  rect.setAttribute('y', '2');
-  rect.setAttribute('width', '8');
-  rect.setAttribute('height', '4');
-  rect.setAttribute('rx', '1');
-  rect.setAttribute('ry', '1');
+  // Set the RECT Element Attributes
+  setAttributes(rect, rectAttributes);
 
   svg.appendChild(rect);
 
   elementToAppend.appendChild(svg);
+};
+
+const setAttributes = (element, attributes) => {
+  for (const key in attributes) {
+    if (Object.hasOwnProperty.call(attributes, key)) {
+      element.setAttribute(key, attributes[key]);
+    }
+  }
 };
 
 const buildHTML = () => {
