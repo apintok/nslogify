@@ -1,7 +1,19 @@
 console.warn('Extension Init...');
 
 // TODO: Work on a light mode
-localStorage.setItem('theme', 'dark');
+let theme = undefined;
+
+browser.runtime.sendMessage({ action: 'getValue' }, function (response) {
+  const responseStatus = response?.value;
+  console.log('response >>> ', responseStatus);
+  if (!responseStatus) {
+    console.log('No value retrieved from extension storage!');
+    theme = 'dark'; // * Set as default theme
+  } else {
+    console.log('Value retrieved from extension storage:', response.value);
+    theme = response.value;
+  }
+});
 
 // UI ELEMENTS
 const scriptNotes = document.getElementById('scriptnote__div');
@@ -153,7 +165,7 @@ const buildHTML = () => {
   const code = document.createElement('code');
 
   // container.classList.add('log', 'dark');
-  container.classList.add('log', localStorage.getItem('theme'));
+  container.classList.add('log', theme);
 
   top.classList.add('top');
   container.appendChild(top);

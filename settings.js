@@ -1,15 +1,33 @@
 var checkDark = document.getElementById('dark');
 var checkLight = document.getElementById('light');
 
-if (checkDark.checked) {
-  localStorage.setItem('theme', checkDark.value);
-}
-
 checkDark.addEventListener('click', function () {
-  console.log('current theme >>> ', localStorage.getItem('theme'));
-  localStorage.setItem('theme', 'dark');
+  console.log('This checkbox >>> ', this);
+  changeTheme(checkDark.value);
 });
 
 checkLight.addEventListener('click', function () {
-  localStorage.setItem('theme', 'light');
+  console.log('This checkbox >>> ', this);
+  changeTheme(checkLight.value);
 });
+
+function changeTheme(theme) {
+  var themeSettings = { name: theme };
+  browser.storage.local.set(themeSettings, function () {
+    console.log('Data saved to extension storage');
+  });
+
+  browser.runtime.onMessage.addListener(function (
+    message,
+    sender,
+    sendResponse
+  ) {
+    if (message.action == 'getValue') {
+      browser.storage.local.get('name').then(function (data) {
+        console.log('data >>> ', data);
+        sendResponse({ value: data.name });
+      });
+      return true;
+    }
+  });
+}
