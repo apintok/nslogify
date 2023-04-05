@@ -1,7 +1,3 @@
-console.log('Extension Init...');
-
-// TODO: Work on a light mode
-
 // UI ELEMENTS
 const scriptNotes = document.getElementById('scriptnote__div');
 
@@ -34,7 +30,7 @@ const executionLogsUI = new MutationObserver((mutations) => {
               const htmlElements = buildHTML();
 
               // ! Add the EVENT LISTENER to the button
-              htmlElements.btn.addEventListener('click', function (e) {
+              htmlElements.btn.addEventListener('click', (e) => {
                 const copiedText =
                   e.target.parentElement.parentElement.lastChild.textContent;
                 navigator.clipboard.writeText(copiedText);
@@ -45,8 +41,12 @@ const executionLogsUI = new MutationObserver((mutations) => {
                 }, 3000);
               });
 
+              console.log('ignored? >>> ', formattedLog);
+
               if (formattedLog !== 'ignore') {
-                htmlElements.code.innerHTML = formattedLog;
+                htmlElements.pre.innerHTML = syntaxHighlight(
+                  JSON.stringify(formattedLog, undefined, 2)
+                );
 
                 // Append the div element to the td element
                 detailsColumn.replaceChild(
@@ -73,77 +73,66 @@ executionLogsUI.observe(scriptNotes, {
 const formatLog = (log) => {
   if (!log) return;
 
-  const parsedLog = JSON.parse(log);
-  let formattedLog = 'ignore';
-  // console.log('Log >>> ', log);
-
-  if (Array.isArray(parsedLog)) {
-    formattedLog = formatArray(parsedLog);
-  } else if (typeof parsedLog === 'object') {
-    formattedLog = formatObject(parsedLog);
+  try {
+    return JSON.parse(log);
+  } catch (e) {
+    return log;
   }
-
-  return formattedLog;
 };
 
-const formatArray = (parsedLog) => {
-  let htmlLog = '';
-
-  parsedLog.forEach((value) => {
-    if (typeof value === 'string') {
-      htmlLog += `<span class="m-left value__str">"${value}"</span>,\n`;
-    } else if (typeof value === 'number') {
-      htmlLog += `<span class="m-left value__num">${value}</span>,\n`;
-    } else if (typeof value === 'boolean') {
-      htmlLog += `<span class="m-left value__bool">${value}</span>,\n`;
-    } else if (value === null) {
-      htmlLog += `<span class="m-left value__null">${value}</span>,\n`;
-    } else if (typeof value === 'undefined') {
-      htmlLog += `<span class="m-left value__null">${value}</span>,\n`;
-    }
-  });
-
-  htmlLog = htmlLog.slice(0, -2);
-  return `[\n${htmlLog}\n]`;
-};
-
-const formatObject = (parsedLog) => {
-  let htmlLog = '';
-
-  for (const key in parsedLog) {
-    if (Object.hasOwnProperty.call(parsedLog, key)) {
-      if (typeof parsedLog[key] === 'string') {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__str">"${parsedLog[key]}"</span>,\n`;
-      } else if (typeof parsedLog[key] === 'number') {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__num">${parsedLog[key]}</span>,\n`;
-      } else if (typeof parsedLog[key] === 'boolean') {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__bool">${parsedLog[key]}</span>,\n`;
-      } else if (parsedLog[key] === null) {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
-      } else if (typeof parsedLog[key] === 'undefined') {
-        htmlLog += `<span class="m-left key">"${key}":</span> <span class="value__null">${parsedLog[key]}</span>,\n`;
+const syntaxHighlight = (json) => {
+  json = json
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  return json.replace(
+    /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+    function (match) {
+      var cssClass = 'number';
+      if (/^"/.test(match)) {
+        if (/:$/.test(match)) {
+          cssClass = 'key';
+        } else {
+          cssClass = 'string';
+        }
+      } else if (/true|false/.test(match)) {
+        cssClass = 'boolean';
+      } else if (/null/.test(match)) {
+        cssClass = 'null';
       }
+      return `<span class="${cssClass}">${match}</span>`;
     }
-  }
-
-  htmlLog = htmlLog.slice(0, -2);
-  return `{\n${htmlLog}\n}`;
+  );
 };
 
 const createSVG = (elementToAppend) => {
-  // Create an SVG element
+  const svgAttributes = {
+    'viewBox': '0 0 24 24',
+    'width': '18',
+    'height': '18',
+    'stroke': 'currentColor',
+    'fill': 'none',
+    'stroke-width': '2',
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round'
+  };
+
+  const rectAttributes = {
+    x: '8',
+    y: '2',
+    width: '8',
+    height: '4',
+    rx: '1',
+    ry: '1'
+  };
+
+  // Create an SVG Elements
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-
-  svg.setAttribute('viewBox', '0 0 24 24');
-  svg.setAttribute('width', '18');
-  svg.setAttribute('height', '18');
-  svg.setAttribute('stroke', 'currentColor');
-  svg.setAttribute('fill', 'none');
-  svg.setAttribute('stroke-width', '2');
-  svg.setAttribute('stroke-linecap', 'round');
-  svg.setAttribute('stroke-linejoin', 'round');
-
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+  // Set the SVG Element Attributes
+  setAttributes(svg, svgAttributes);
 
   path.setAttribute(
     'd',
@@ -152,18 +141,20 @@ const createSVG = (elementToAppend) => {
 
   svg.appendChild(path);
 
-  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-
-  rect.setAttribute('x', '8');
-  rect.setAttribute('y', '2');
-  rect.setAttribute('width', '8');
-  rect.setAttribute('height', '4');
-  rect.setAttribute('rx', '1');
-  rect.setAttribute('ry', '1');
+  // Set the RECT Element Attributes
+  setAttributes(rect, rectAttributes);
 
   svg.appendChild(rect);
 
   elementToAppend.appendChild(svg);
+};
+
+const setAttributes = (element, attributes) => {
+  for (const key in attributes) {
+    if (Object.hasOwnProperty.call(attributes, key)) {
+      element.setAttribute(key, attributes[key]);
+    }
+  }
 };
 
 const buildHTML = () => {
@@ -187,11 +178,11 @@ const buildHTML = () => {
   container.appendChild(display);
   display.appendChild(pre);
   code.id = 'code';
-  pre.appendChild(code);
+  // pre.appendChild(code);
 
   return {
     container,
     btn,
-    code
+    pre
   };
 };
