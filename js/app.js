@@ -41,6 +41,8 @@ const executionLogsUI = new MutationObserver((mutations) => {
                 }, 3000);
               });
 
+              console.log('ignored? >>> ', formattedLog);
+
               if (formattedLog !== 'ignore') {
                 htmlElements.pre.innerHTML = syntaxHighlight(
                   JSON.stringify(formattedLog, undefined, 2)
@@ -70,7 +72,12 @@ executionLogsUI.observe(scriptNotes, {
 // FUNCTIONS
 const formatLog = (log) => {
   if (!log) return;
-  return JSON.parse(log);
+
+  try {
+    return JSON.parse(log);
+  } catch (e) {
+    return log;
+  }
 };
 
 const syntaxHighlight = (json) => {
