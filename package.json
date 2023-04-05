@@ -4,7 +4,7 @@
   "description": "Beautify SuiteScript Logs",
   "main": "nslogify.js",
   "scripts": {
-    "dev": "parcel build ./js/app.js --out-dir ./ --out-file nslogify.js --public-url .",
+    "dev": "parcel build ./js/app.js --out-dir ./content_scripts/ --out-file nslogify.js --public-url .",
     "build": "parcel build ./js/app.js"
   },
   "repository": {
