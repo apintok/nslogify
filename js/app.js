@@ -30,6 +30,7 @@ const executionLogsUI = new MutationObserver((mutations) => {
               const htmlElements = buildHTML();
 
               // ! Add the EVENT LISTENER to the button
+              htmlElements.btn.style.cursor = "pointer";
               htmlElements.btn.addEventListener('click', (e) => {
                 const copiedText =
                   e.target.parentElement.parentElement.lastChild.textContent;

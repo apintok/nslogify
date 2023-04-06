@@ -11,8 +11,8 @@
 
 .top {
   display: flex;
-  justify-content: end;
-  padding: 4px 5px 4px 0;
+  justify-content: start;
+  padding: 5px 5px 4px 0;
   background-color: #666;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
