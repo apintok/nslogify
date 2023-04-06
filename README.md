@@ -24,6 +24,15 @@ To install this web extension in Firefox locally, *__only__* the following file 
         manifest.json
         README.md
 ```
+
+## Change
+
+Parcel is being used to generate an extension bundle. After changing something in the code don't forget to run the command to redo the bundle and navigate to Firefox add-ons area and press 'reload' to reflect the changes.
+
+```bash
+    npm run dev
+```
+
 ## Statistics
 
 [![file size](https://img.shields.io/github/directory-file-count/apintok/nslogify)]()
