@@ -2,9 +2,10 @@
   "name": "nslogify",
   "version": "1.0.0",
   "description": "Beautify SuiteScript Logs",
-  "main": "nslogify.js",
+  "main": "./content_scripts/nslogify.js",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
-    "dev": "parcel build ./js/app.js --out-dir ./content_scripts/ --out-file nslogify.js --public-url .",
+    "dev": "parcel build ./js/app.js --dist-dir ./content_scripts/ --public-url .",
     "build": "parcel build ./js/app.js"
   },
   "repository": {
@@ -23,6 +24,6 @@
   },
   "homepage": "https://github.com/apintok/nslogify#readme",
   "devDependencies": {
-    "parcel-bundler": "^1.12.5"
+    "parcel": "^2.8.3"
   }
 }

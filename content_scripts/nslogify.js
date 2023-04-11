@@ -1,4 +1,135 @@
-parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcelRequire,u="function"==typeof require&&require;function f(t,n){if(!r[t]){if(!e[t]){var i="function"==typeof parcelRequire&&parcelRequire;if(!n&&i)return i(t,!0);if(o)return o(t,!0);if(u&&"string"==typeof t)return u(t);var c=new Error("Cannot find module '"+t+"'");throw c.code="MODULE_NOT_FOUND",c}p.resolve=function(r){return e[t][1][r]||r},p.cache={};var l=r[t]=new f.Module(t);e[t][0].call(l.exports,p,l,l.exports,this)}return r[t].exports;function p(e){return f(p.resolve(e))}}f.isParcelRequire=!0,f.Module=function(e){this.id=e,this.bundle=f,this.exports={}},f.modules=e,f.cache=r,f.parent=o,f.register=function(r,t){e[r]=[function(e,r){r.exports=t},{}]};for(var c=0;c<t.length;c++)try{f(t[c])}catch(e){i||(i=e)}if(t.length){var l=f(t[t.length-1]);"object"==typeof exports&&"undefined"!=typeof module?module.exports=l:"function"==typeof define&&define.amd?define(function(){return l}):n&&(this[n]=l)}if(parcelRequire=f,i)throw i;return f}({"A2T1":[function(require,module,exports) {
-var e=document.getElementById("scriptnote__div"),t=new MutationObserver(function(t){t.forEach(function(t){if("childList"===t.type&&t.target.id===e.id)for(var i=t.target.firstElementChild.lastChild.childNodes,a=0;a<i.length;a++)if(a%2==0){var d=i[a].children,c=function(){if(Object.hasOwnProperty.call(d,l)&&"7"===l){var e=d[7],t=n(e.textContent),i=o();i.btn.addEventListener("click",function(e){var t=e.target.parentElement.parentElement.lastChild.textContent;navigator.clipboard.writeText(t),i.btn.textContent="Code copied!",setInterval(function(){i.btn.textContent="Copy Code"},3e3)}),console.log("ignored? >>> ",t),"ignore"!==t&&(i.pre.innerHTML=r(JSON.stringify(t,void 0,2)),e.replaceChild(i.container,e.firstChild))}};for(var l in d)c()}})});t.observe(e,{childList:!0,attributes:!0,subtree:!0});var n=function(e){if(e)try{return JSON.parse(e)}catch(t){return e}},r=function(e){return(e=e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")).replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,function(e){var t="number";return/^"/.test(e)?t=/:$/.test(e)?"key":"string":/true|false/.test(e)?t="boolean":/null/.test(e)&&(t="null"),'<span class="'.concat(t,'">').concat(e,"</span>")})},i=function(e){var t=document.createElementNS("http://www.w3.org/2000/svg","svg"),n=document.createElementNS("http://www.w3.org/2000/svg","path"),r=document.createElementNS("http://www.w3.org/2000/svg","rect");a(t,{viewBox:"0 0 24 24",width:"18",height:"18",stroke:"currentColor",fill:"none","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round"}),n.setAttribute("d","M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"),t.appendChild(n),a(r,{x:"8",y:"2",width:"8",height:"4",rx:"1",ry:"1"}),t.appendChild(r),e.appendChild(t)},a=function(e,t){for(var n in t)Object.hasOwnProperty.call(t,n)&&e.setAttribute(n,t[n])},o=function(){var e=document.createElement("div"),t=document.createElement("div"),n=document.createElement("button"),r=document.createElement("div"),a=document.createElement("pre"),o=document.createElement("code");return e.classList.add("log","dark"),t.classList.add("top"),e.appendChild(t),n.id="copy",i(t),n.textContent="Copy Code",r.classList.add("display"),r.id="display",t.appendChild(n),e.appendChild(r),r.appendChild(a),o.id="code",{container:e,btn:n,pre:a}};
-},{}]},{},["A2T1"], null)
+// UI ELEMENTS
+const $8e3044430ec015a6$var$scriptNotes = document.getElementById("scriptnote__div");
+// Create a new observer object for the Execution Logs Tab in the UI.
+const $8e3044430ec015a6$var$executionLogsUI = new MutationObserver((mutations)=>{
+    mutations.forEach((mutation)=>{
+        if (mutation.type === "childList" && mutation.target.id === $8e3044430ec015a6$var$scriptNotes.id) {
+            const scriptNotesTable = mutation.target.firstElementChild;
+            const scriptNotesTableBody = scriptNotesTable.lastChild;
+            const scriptNotesTableLines = scriptNotesTableBody.childNodes;
+            const detailsColumnIndex = "7";
+            // * Loop thorugh each table line
+            for(let i = 0; i < scriptNotesTableLines.length; i++){
+                if (i % 2 !== 0) continue;
+                const columns = scriptNotesTableLines[i].children;
+                // * Loop thorugh each line column
+                for(const key in columns){
+                    if (Object.hasOwnProperty.call(columns, key)) {
+                        if (key === detailsColumnIndex) {
+                            const detailsColumn = columns[detailsColumnIndex];
+                            const formattedLog = $8e3044430ec015a6$var$formatLog(detailsColumn.textContent);
+                            const htmlElements = $8e3044430ec015a6$var$buildHTML();
+                            // ! Add the EVENT LISTENER to the button
+                            htmlElements.btn.addEventListener("click", (e)=>{
+                                const copiedText = e.target.parentElement.parentElement.lastChild.textContent;
+                                navigator.clipboard.writeText(copiedText);
+                                htmlElements.btn.textContent = "Code copied!";
+                                setInterval(()=>{
+                                    htmlElements.btn.textContent = "Copy Code";
+                                }, 3000);
+                            });
+                            console.log("ignored? >>> ", formattedLog);
+                            if (formattedLog !== "ignore") {
+                                htmlElements.pre.innerHTML = $8e3044430ec015a6$var$syntaxHighlight(JSON.stringify(formattedLog, undefined, 2));
+                                // Append the div element to the td element
+                                detailsColumn.replaceChild(htmlElements.container, detailsColumn.firstChild);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+// Start observing the document's body element and all its descendants
+$8e3044430ec015a6$var$executionLogsUI.observe($8e3044430ec015a6$var$scriptNotes, {
+    childList: true,
+    attributes: true,
+    subtree: true
+});
+// FUNCTIONS
+const $8e3044430ec015a6$var$formatLog = (log)=>{
+    if (!log) return;
+    try {
+        return JSON.parse(log);
+    } catch (e) {
+        return log;
+    }
+};
+const $8e3044430ec015a6$var$syntaxHighlight = (json)=>{
+    json = json.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+        var cssClass = "number";
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) cssClass = "key";
+            else cssClass = "string";
+        } else if (/true|false/.test(match)) cssClass = "boolean";
+        else if (/null/.test(match)) cssClass = "null";
+        return `<span class="${cssClass}">${match}</span>`;
+    });
+};
+const $8e3044430ec015a6$var$createSVG = (elementToAppend)=>{
+    const svgAttributes = {
+        "viewBox": "0 0 24 24",
+        "width": "18",
+        "height": "18",
+        "stroke": "currentColor",
+        "fill": "none",
+        "stroke-width": "2",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+    };
+    const rectAttributes = {
+        x: "8",
+        y: "2",
+        width: "8",
+        height: "4",
+        rx: "1",
+        ry: "1"
+    };
+    // Create an SVG Elements
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    // Set the SVG Element Attributes
+    $8e3044430ec015a6$var$setAttributes(svg, svgAttributes);
+    path.setAttribute("d", "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2");
+    svg.appendChild(path);
+    // Set the RECT Element Attributes
+    $8e3044430ec015a6$var$setAttributes(rect, rectAttributes);
+    svg.appendChild(rect);
+    elementToAppend.appendChild(svg);
+};
+const $8e3044430ec015a6$var$setAttributes = (element, attributes)=>{
+    for(const key in attributes)if (Object.hasOwnProperty.call(attributes, key)) element.setAttribute(key, attributes[key]);
+};
+const $8e3044430ec015a6$var$buildHTML = ()=>{
+    // * HTML ELEMENTS
+    const container = document.createElement("div");
+    const top = document.createElement("div");
+    const btn = document.createElement("button");
+    const display = document.createElement("div");
+    const pre = document.createElement("pre");
+    const code = document.createElement("code");
+    container.classList.add("log", "dark");
+    top.classList.add("top");
+    container.appendChild(top);
+    btn.id = "copy";
+    $8e3044430ec015a6$var$createSVG(top);
+    btn.textContent = "Copy Code";
+    display.classList.add("display");
+    display.id = "display";
+    top.appendChild(btn);
+    container.appendChild(display);
+    display.appendChild(pre);
+    code.id = "code";
+    // pre.appendChild(code);
+    return {
+        container: container,
+        btn: btn,
+        pre: pre
+    };
+};
+
+
 //# sourceMappingURL=nslogify.js.map
