@@ -20,6 +20,7 @@ const $8e3044430ec015a6$var$executionLogsUI = new MutationObserver((mutations)=>
                             const formattedLog = $8e3044430ec015a6$var$formatLog(detailsColumn.textContent);
                             const htmlElements = $8e3044430ec015a6$var$buildHTML();
                             // ! Add the EVENT LISTENER to the button
+                            htmlElements.btn.style.cursor = "pointer";
                             htmlElements.btn.addEventListener("click", (e)=>{
                                 const copiedText = e.target.parentElement.parentElement.lastChild.textContent;
                                 navigator.clipboard.writeText(copiedText);
