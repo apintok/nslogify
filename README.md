@@ -58,7 +58,7 @@ Parcel is being used to generate an extension bundle. After changing something i
 - Operating system used for the build?
   - **Windows**
 - Details of any specific versions of tools or utilities needed?
-  - **parcel-bundler**
+  - **parcel**
 - Links to any tools or utilities that need to be downloaded?
   - [**Parcel**](https://parceljs.org)
 - Guidance for installing any downloaded tools and utilities, for example, links to online instructions?
