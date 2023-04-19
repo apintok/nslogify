@@ -1,16 +1,16 @@
 # nslogify
 
-A Mozilla Firefox browser extension that pretty prints SuiteScript Logs in NetSuite ERP Software. It displays Arrays & Objects logs in a humand readable way. This extension was built using Javascript & CSS. I personally use Mozilla Firefox to work with NetSuite and I think the SuiteScript logs can be better presented. So I decided to create this extension.
+A Mozilla Firefox browser extension that pretty prints SuiteScript Logs in NetSuite ERP Software. It displays Arrays & Objects logs in a humand readable way. This extension was built using Javascript & CSS. I personally use Mozilla Firefox to work with NetSuite and I think the SuiteScript logs can be better presented, so I decided to create this extension.
 
 ## Details
 
-- 🌍 Available for Firefox!
+- 🌍 Available for Firefox.
 - 📌 The goal is to format SuiteScript Logs that are either Arrays or Objects.
-- :package: The extension is built using Parcel Bundler.
-- 🚧 Working still to have it published for any one who wants to use it. There are a lot of things to consider and I am trying to make sure the first version at least works.
-- 👽 Open for help while developing. Just let me know if you want to.
+- :package: The extension is built using Parcel.
+- 🚧 Working still to have it published for any one who wants to use it.
+- 👽 Open for any collaboration while developing, just let me know if you want to.
 
-## Local Installation
+## Browser Installation
 
 To install this web extension locally for Firefox, _**only**_ the following file structure is needed in order for it to work:
 
@@ -27,11 +27,15 @@ To install this web extension locally for Firefox, _**only**_ the following file
         README.md
 ```
 
-After download the respective file structure. On Firefox open the [about:debugging](about:debugging#/runtime/this-firefox) page and load the extension manifest.json file.
+After downloading the file structure above:
+  1) On Mozilla Firefox open a new tab and enter **about:debugging**;
+  2) Click on **This Firefox** menu option;
+  3) Click on the **Load Temporary Add-on...** button;
+  4) Select the **manifest.json** file from the project directoy.
 
 ## Development
 
-Parcel is being used to generate an extension bundle. After changing something in the code don't forget to run the command to redo the bundle. Then navigate to Firefox [about:debugging](about:debugging#/runtime/this-firefox) add-ons area and press 'reload' for the changes to reflext.
+Parcel is being used to generate an extension bundle. After changing something in the code don't forget to run the command to redo the bundle. Then navigate to Firefox **about:debugging** add-ons area and press **reload** for the changes to reflect.
 
 ```bash
     npm run dev
